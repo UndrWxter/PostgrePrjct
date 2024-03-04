@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}<title>Дом в миг - Обратная связь</title>{% endblock %}
+
+{% block css %}<link rel = 'stylesheet' href = "{% static 'css/gg.css' %}">{% endblock %}
+
+{% block content %}
+    <div class="wall">
+    <div class="dd">
+        <section class="fr">
+            <h2>Напишите нам письмо</h2>
+        </section>
+        <section class="fr"> 
+            <form class="free" method="post">
+                {% csrf_token %}
+                {% for i in form %}
+                    {{ i.label }} {{ i }}
+                    {{ i.errors }}
+                    <br>
+                {% endfor %}
+                <button type="submit">Отправить</button>
+            </form>
+        </section>
+    </div>
+    </div>
+{% endblock %}

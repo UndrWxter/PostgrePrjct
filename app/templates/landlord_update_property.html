@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/add.css' %}">
+{% endblock %}
+
+{% block title %}<title>Дом в миг - обновление обьявления</title>{% endblock %}
+
+{% block content %}
+    <section>
+      <form method="post" action="{% url 'user_account_properties' user_id=request.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" value="update" name="action">
+        <input type="hidden" value="{{ post.pk }}" name="pk">
+
+        <label for="title">Название:</label>
+        <input type="text" name="title" value="{{post.title}}" required><br>
+    
+        <label for="property_type">Тип жилья:</label>
+        <input type="text" name="property_type" value="{{post.property_type}}" required><br>
+    
+        <label for="area">Площадь:</label>
+        <input type="number" name="area" value="{{post.area}}" required><br>
+    
+        <label for="num_rooms">Количество комнат:</label>
+        <input type="number" name="num_rooms" value="{{post.num_rooms}}"><br>
+    
+        <label for="bath_rooms">Количество ванных:</label>
+        <input type="number" name="bath_rooms" value="{{post.bath_rooms}}"><br>
+    
+        <label for="bed_rooms">Количество спальных комнат:</label>
+        <input type="number" name="bed_rooms" value="{{post.bed_rooms}}"><br>
+    
+        <label for="address">Адрес:</label>
+        <input type="text" name="address" value="{{post.address}}" required><br>
+    
+        <label for="district_location">Город-район:</label>
+        <input type="text" name="district_location" value="{{post.district_location}}" required><br>
+    
+        <label for="rent_cost">Стоимость аренды:</label>
+        <input type="number" name="rent_cost" value="{{post.rent_cost}}" required><br>
+    
+        <label for="rent_type">Тип аренды:</label>
+        <select name="rent_type" required>
+          <option value="1" {% if post.rent_type == 1 %}selected{% endif %}>Почасовая</option>
+          <option value="2" {% if post.rent_type == 2 %}selected{% endif %}>Ежедневная</option>
+          <option value="3" {% if post.rent_type == 3 %}selected{% endif %}>Ежемесячная</option>
+        </select><br>
+    
+        <label for="description">Описание:</label><br>
+        <textarea name="description" rows="4" cols="50" required>{{post.description}}</textarea><br>
+        <hr>
+
+        <label for="owner_number">Номер телефона:</label>
+        <input type="text" name="owner_number" value="{{post.owner_number}}"><br>
+        <label>WhatsApp на этом номере? &nbsp</label><input type="checkbox" name="whatsapp" {% if post.whatsapp %}checked{% endif %} value="{{post.whatsapp}}"><br>
+
+        <label for="telegram">Telegram:</label>
+        <input type="text" name="telegram" value="{{post.telegram}}"><br>
+    
+        <button type="submit" class="btn btn-light like-btn btn-block">Обновить данные</button>
+    </form>            
+    </section>
+{% endblock %}

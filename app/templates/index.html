@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/index.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+{% endblock %}
+
+{% block title %}<title>Дом в миг - Главная</title>{% endblock %}
+
+{% block content %}
+<div id="booking" class="section">
+  <div class="section-center">
+      <div class="container">
+          <div class="row">
+              <div class="booking-form">
+                  <div class="form-header">
+                      <h1>Найдите свой будущий дом</h1>
+                  </div>
+                  <form action="{% url 'search_results' %}" method="get">
+                      <div class="form-group">
+                          <input class="form-control" name="district_location" type="text" placeholder="Город" required>
+                          <span class="form-label">Destination</span>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <input class="form-control" type="date">
+                                  <span class="form-label">Въезд:</span>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <input class="form-control" type="date">
+                                  <span class="form-label">Выезд:</span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4">
+                              <div class="form-group">
+                                  <select class="form-control">
+                                      <option value="" selected hidden>Кл-во комнат</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                      <option value="3">3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                  </select>
+                                  <span class="select-arrow"></span>
+                                  <span class="form-label">Rooms</span>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="form-group">
+                                  <select name="rent_type" class="form-control">
+                                      <option value="" selected hidden>Тип аренды</option>
+                                      <option value="1">Почасовая</option>
+                                      <option value="2">Ежедневная</option>
+                                      <option value="3">Ежемесячная</option>
+                                  </select>
+                                  <span class="select-arrow"></span>
+                                  <span class="form-label">Rent Type</span>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="form-group">
+                                  <select name="property_type" class="form-control">
+                                      <option value="" selected hidden>Вид жилья</option>
+                                      <option value="Квартира">Квартира</option>
+                                      <option value="Частный дом">Частный дом</option>
+                                      <option value="Коттедж">Коттедж</option>
+                                  </select>
+                                  <span class="select-arrow"></span>
+                                  <span class="form-label"></span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-btn">
+                          <button type="submit" class="submit-btn">Найти</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% if request.user.is_authenticated %}
+{% if email_passed == False %}
+<div id="booking" class="sect">
+  <div class="section-center">
+      <div class="container">
+          <div class="row">
+              <div class="booking-form">
+                  <div class="form-header">
+                      <h1>Подпишитесь на нашу рассылку</h1>
+                  </div>
+                  <div class="form-group">
+                        <form action="{% url 'home' %}" method="post">
+                            {% csrf_token %}
+                            <input type="email" name="email" class="form-control" placeholder="Email"><br>
+                            <button type="submit" class="submit-btn">Подтвердить</button>
+                        </form>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+
+
+{% endblock %}

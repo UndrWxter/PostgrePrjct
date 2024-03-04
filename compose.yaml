@@ -1,0 +1,30 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres:alpine"
+    environment:
+      POSTGRES_DB: alimzhan
+      POSTGRES_USER: alimzhan
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5432:5432"
+    networks:
+      - djangonetwork
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - djangonetwork
+
+  redis:
+    image: "redis:alpine"
+    networks:
+      - djangonetwork
+
+networks:
+  djangonetwork:
+    driver: bridge

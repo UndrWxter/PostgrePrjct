@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = 'stylesheet' href = "{% static 'css/base.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel = 'stylesheet' href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script scr="{% static "js/base.js" %}"></script>
+    {% block title %}<title>Дом в Миг</title>{% endblock %}
+    {% block css%}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="content">
+            <div class="logo-contain">
+                <div class="logo">
+                    <a href="{% url "home" %}"><img alt="logo" src="{% static "images/logo.png" %}"></a>
+                </div>
+            </div>
+            <div class="right-section">
+                <div class="create">
+                    <a href="{% url "landlord_add_property" %}"><img alt="create" src="{% static "images/add.png" %}">Подать объявление</a>
+                </div>
+                <div class="favorite">
+                    <a href="{% url "favorites" %}"><img alt="fav" src="{% static "images/fav.png" %}"></a>
+                </div>
+                <div class="notif">
+                    <a href="{% url "notifications" %}">
+                        <img alt="notf" src="{% static "images/bell.png" %}">
+                            {% if notifications_num > 0 %}
+                                <span class="notification-count" id="notificationCount">
+                                {{ notifications_num }}
+                                </span>
+                            {% endif %} 
+                    </a>                
+                </div>
+                <a><img alt="account" src="{% static "images/user.png" %}"></a>
+                <div class="account">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'user_account' user_id=user.pk %}" class="text-nav">{{ user.first_name }}</a>
+                        <a href="{% url 'logout' %}" class="text-nav">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="text-nav">Регистрация</a>
+                        <a href="{% url 'login' %}" class="text-nav">Войти</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="bot-head">
+        <div class="content">
+            
+            <div class="search-container">
+                <form action="{% url 'search_results' %}" method="get">
+                    <input type="text" name="title" id="search-input" placeholder="Поиск...">
+                    <button type="submit" id="search-button"><img src="{% static "images/find.png" %}"></button>
+                </form>
+            </div>
+            <div class="right-items">
+                <div class="feedback">
+                    <a href="{% url "contact" %}"><img alt="feedback" src="{% static "images/chat.png" %}">  Обратная свзязь</a>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

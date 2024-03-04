@@ -1,0 +1,118 @@
+.radius img{
+    border-radius: 10px;
+}
+
+.contain{
+    margin-top: 45px;
+}
+
+.section-form-container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+#propertySlider .carousel-inner img {
+    max-width: 100%;  /* Максимальная ширина изображения будет 100% от родительского контейнера */
+    height: auto;     /* Автоматическое соотношение сторон для изображения */
+}
+
+.violet button{
+    background-color: #8055d6;
+    color: white;
+}
+
+.unique-section-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.unique-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.unique-section-content a {
+    text-decoration: none;
+    color: #8055d6; /* Или любой другой цвет ссылки по вашему выбору */
+    font-weight: bold;
+}
+
+.unique-section-content a:hover {
+    text-decoration: underline;
+}
+
+.reviews-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.avg-rate {
+    margin-bottom: 10px;
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-form label {
+    margin-top: 10px;
+}
+
+.review-form textarea {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.review-form button {
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.characteristics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.characteristic-block {
+    background-color: #cebff9;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    width: 48%; /* Ширина блока, чтобы они могли помещаться в ряд */
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.characteristic-block h5 {
+    margin-bottom: 5px;
+    color: white;
+}
+
+.characteristic-block p {
+    margin: 0;
+    color: white;
+}
+
+/* Дополнительные стили по желанию */
+.stars{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Property Rental - Account page</title>{% endblock %}
+{% load static %}
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/search.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="section-results-container">
+    {% for i in posts %}
+    <div class="result-container">
+    <div class="row">
+        <div class="col-md-4">
+          <!-- Левая часть -->
+          <div class="">
+            {% if i.get_preview_photo != None %}
+                <img width="400px" src="{{ i.get_preview_photo }}">
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-5">
+          <!-- Средняя часть -->
+          <div class="menu">
+            <h4>{{i.num_rooms}}-комн., {{i.area|floatformat}}м² {{i.property_type}}</h4>
+            <h5>{{i.title}}</h5>
+            <hr>
+            <p>Описание:<p>
+            <p>{{ i.description|slice:":150" }}{% if i.description|length > 150 %}...{% endif %}</p>
+            <a href="{{ i.get_absolute_url }}">Поподробнее...</a>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="">
+            <h4>{{ i.rent_cost|floatformat }}₸ / 
+                {% if i.rent_type == 1 %}
+                    час
+                {% elif i.rent_type == 2 %}
+                    сутки
+                {% elif i.rent_type == 3 %}
+                    месяц
+                {% endif %}
+            </h4>
+            <h5>г.{{i.district_location}},{{i.address}}</h5>
+            <div class="container mt-5 ">
+                <div class="row">
+                    <!-- Левая кнопка с сердечком -->
+                    <div class="col">
+                        <a href="{% url 'landlord_update_property' property_id=i.pk %}" type="button" class="btn btn-purple btn-block">
+                            Изменение описания
+                        </a>
+                    </div>
+                                                        
+                    <!-- Вторая пустая кнопка -->
+                    <div class="col">
+                        <a href="{% url 'landlord_update_photos' property_id=i.pk %}" type="button" class="btn btn-purple btn-block">
+                            Изменение фото
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <form method="post" action="{% url 'user_account_properties' user_id=request.user.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" value="delete" name="action">
+                        <input type="hidden" value="{{ i.pk }}" name="pk">
+                        <button type="submit" class="btn btn-light like-btn btn-block">Delete</button>
+                    </form>    
+                </div>
+        
+                
+                <div class="row mt-3">
+                    <div class="col">
+                        <h6>Просмотры: {{i.views}}</h6>
+                    </div>
+                </div>
+                
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+        {% if page_obj.has_other_pages %}
+            <ul>
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li>{{ i }}</li>
+                {% elif i == 1 %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i >= page_obj.number|add:-2 and i <= page_obj.number|add:2  %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i == page_obj.number|add:3 %}
+                    <li>...</li>
+                {% elif i == page_obj.number|add:-3 %}
+                    <li>...</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+{% endblock %}

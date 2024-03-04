@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/search.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+{% endblock %}
+
+{% block title %}<title>Дом в миг - Поиск</title>{% endblock %}
+
+{% block content %}
+    <section class="section-form-container">
+        <form action="{% url 'search_results' %}" method="get">
+            <div class="section-formform-container1 otstup">
+                <select name="property_type">
+                    <option value="" selected disabled>Тип дома</option>
+                    <option value="Квартира">Квартира</option>
+                    <option value="Частный дом">Частный дом</option>
+                    <option value="Коттедж">Коттедж</option>
+                </select>
+
+                <input type="text" name="district_location" placeholder="Поиск по город-район">
+
+                <input type="text" name="rent_cost_from" id="rent_cost_from" placeholder="Цена аренды мин.">
+                <input type="text" name="rent_cost_to" id="rent_cost_to" placeholder="Цена аренды макс.">
+                    
+                <button id="showMoreFiltersBtn">Еще фильтры</button>
+
+                <div id="additionalFiltersOverlay" class="overlay"></div>
+                
+
+                <div id="additionalFiltersContainer" class="additional-filters-container">
+                    <input type="number" name="area_from" placeholder="Площадь мин">
+                    <input type="number" name="area_to" placeholder="Площадь макс">
+                    
+                    <input type="number" name="num_rooms_from" placeholder="Кол-во комнат мин.">
+                    <input type="number" name="num_rooms_to" placeholder="Кол-во комнат макс.">
+
+                    <input type="number" name="bath_rooms_from" placeholder="Кол-во ванных мин.">
+                    <input type="number" name="bath_rooms_to" placeholder="Кол-во ванных макс.">
+
+                    <input type="number" name="bed_rooms_from" placeholder="Кол-во спальных комнат мин.">
+                    <input type="number" name="bed_rooms_to" placeholder="Кол-во спальных комнат макс.">
+                    <button id="closeFiltersBtn">Закрыть</button>
+                </div>
+            </div>
+
+            
+            <div class="section-formform-container2">
+        
+                <select name="rent_type">
+                    <option value="" selected disabled>Выберите тип аренды</option>
+                    <option value="1">Почасовая</option>
+                    <option value="2">Ежедневная</option>
+                    <option value="3">Ежемесячная</option>
+                </select>
+
+                <select name="order">
+                    <option value="" selected disabled>Сортировать по</option>
+                    <option value="new">Самые новые</option>
+                    <option value="old">Самые старые</option>
+                    <option value="cheep">Дешевые</option>
+                    <option value="expen">Самые дорогие</option>
+                </select>
+                <button type="submit">Подтвердить</button>
+            </div>
+        </form>
+    </section>
+    <section class="section-results-container">
+        {% for i in posts %}
+        <div class="result-container">
+        <div class="row">
+            <div class="col-md-4">
+              <!-- Левая часть -->
+              <div class="">
+                {% if i.get_preview_photo != None %}
+                    <img width="400px" src="{{ i.get_preview_photo }}">
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-md-5">
+              <!-- Средняя часть -->
+              <div class="menu">
+                <h4>{{i.num_rooms}}-комн., {{i.area|floatformat}}м² {{i.property_type}}</h4>
+                <h5>{{i.title}}</h5>
+                <hr>
+                <p>Описание:<p>
+                <p>{{ i.description|slice:":150" }}{% if i.description|length > 150 %}...{% endif %}</p>
+                <a href="{{ i.get_absolute_url }}">Поподробнее...</a>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="">
+                <h4>{{ i.rent_cost|floatformat }}₸ / 
+                    {% if i.rent_type == 1 %}
+                        час
+                    {% elif i.rent_type == 2 %}
+                        сутки
+                    {% elif i.rent_type == 3 %}
+                        месяц
+                    {% endif %}
+                </h4>
+                <h5>г.{{i.district_location}},{{i.address}}</h5>
+                <div class="container mt-5 ">
+                    <div class="row">
+                        <!-- Левая кнопка с сердечком -->
+                        <div class="col violet">
+                            {% if request.user.is_authenticated and i.owner != user %}
+                                <form action="{{ current_url }}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="current_url" value="{{ current_url }}">
+                                    <input type="hidden" name="prop_id" value="{{ i.pk }}">
+                                    {% if i.pk in liked  %}
+                                        <input type="hidden" name="form_submit" value="unlike">
+                                    {% else %}
+                                        <input type="hidden" name="form_submit" value="like">
+                                    {% endif %}
+                                    <button type="submit" class="btn btn-light like-btn btn-block">
+                                        {% if i.pk in liked  %} <i id="heartIcon" class="fas fa-heart"></i> Unlike 
+                                        {% else %} <i id="heartIcon" class="far fa-heart"></i> Like {% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                                                
+                        <!-- Вторая пустая кнопка -->
+                        <div class="col">
+                            <button type="button" class="btn btn-secondary btn-block">
+                                {{i.owner}}
+                            </button>
+                        </div>
+                    </div>
+                
+                    
+                    <div class="row mt-3">
+                        <div class="col">
+                            <h6>Просмотры: {{i.views}}</h6>
+                        </div>
+                    </div>
+                    
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
+        {% endfor%}
+        {% if page_obj.has_other_pages %}
+            <ul>
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li>{{ i }}</li>
+                {% elif i == 1 %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i >= page_obj.number|add:-2 and i <= page_obj.number|add:2  %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i == page_obj.number|add:3 %}
+                    <li>...</li>
+                {% elif i == page_obj.number|add:-3 %}
+                    <li>...</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+    <script>
+        function toggleLike() {
+            var formSubmitInput = document.getElementById('form_submit');
+            var heartIcon = document.getElementById('heartIcon');
+            var likeForm = document.getElementById('likeForm');
+    
+            if (formSubmitInput.value === 'like') {
+                formSubmitInput.value = 'unlike';
+                heartIcon.classList.remove('far');
+                heartIcon.classList.add('fas', 'text-danger');
+                likeForm.classList.add('like-btn-active');
+            } else {
+                formSubmitInput.value = 'like';
+                heartIcon.classList.remove('fas', 'text-danger');
+                heartIcon.classList.add('far');
+                likeForm.classList.remove('like-btn-active');
+            }
+    
+            likeForm.submit();
+        }
+    </script>
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+        
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+        
+    
+    
+{% endblock %}

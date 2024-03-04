@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/search.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+{% endblock %}
+
+{% block title %}<title>Дом в миг - уведомления</title>{% endblock %}
+
+{% block content %}
+
+{% if notifications_num == 0 %}
+                    <h2 class="section-results-container-gray">Все уведомления прочитанны<br></h2>
+                {% endif %}
+{% for i in notifications %}
+            <div class="section-results-container">
+                
+                {% if i.type == 1 %}
+                    <h2>У вас новая заявка!<br>Взгляните на нее</h2>
+                    <form id="confirm-form" action="{% url 'user_account_applications' user_id=request.user.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="notification">
+                        <input type="hidden" name="pk" value="{{ i.pk }}">
+                        <button type="submit">Входящие заявки</button>
+                    </form>
+                {% elif i.type == 2 %}
+                    <h2>Ваша заяка была успешно одобрена!</h2>
+                    <form id="confirm-form" action="{% url 'notifications' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ i.pk }}">
+                        <button type="submit">Прочитанно</button>
+                    </form>
+                {% elif i.type == 3 %}
+                    <h2>Ваша заяка была отклонена!</h2>
+                    <form id="deny-form" action="{% url 'notifications' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ i.pk }}">
+                        <button type="submit">Прочитанно</button>
+                    </form>
+                {% elif i.type == 4 %}
+                    <h2>Ваша аренда отклонена!</h2>
+                    <form id="deny-form" action="{% url 'notifications' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ i.pk }}">
+                        <button type="submit">Прочитанно</button>
+                    </form>
+                {% endif %}
+                <hr>
+            {% endfor%}
+            {% if page_obj.has_other_pages %}
+                <ul>
+                {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li>{{ i }}</li>
+                    {% elif i == 1 %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% elif i >= page_obj.number|add:-2 and i <= page_obj.number|add:2  %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% elif i == page_obj.number|add:3 %}
+                        <li>...</li>
+                    {% elif i == page_obj.number|add:-3 %}
+                        <li>...</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+            </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}<title>Дом в миг - Account page</title>{% endblock %}
+
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/search.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-results-container">
+{% for i in posts %}
+            <h2>{{i.property.title}}</h2>
+            <p>{{i.tenant.username}}&nbsp {{i.tenant.email}}</p>
+            <p>{{i.start_date}}</p>
+            <p>{{i.end_date_date}}</p>
+            <form id="confirm-form" action="{% url 'user_account_applications' user_id=i.owner.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="confirm">
+                <input type="hidden" name="pk" value="{{ i.pk }}">
+                <button type="submit">Подтвердить</button>
+                <br>
+            </form>
+            <form id="deny-form" action="{% url 'user_account_applications' user_id=i.owner.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="deny">
+                <input type="hidden" name="pk" value="{{ i.pk }}">
+                <button type="submit">Отклонить</button>
+            </form>
+            <hr>
+        {% endfor%}
+        {% if page_obj.has_other_pages %}
+            <ul>
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li>{{ i }}</li>
+                {% elif i == 1 %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i >= page_obj.number|add:-2 and i <= page_obj.number|add:2  %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i == page_obj.number|add:3 %}
+                    <li>...</li>
+                {% elif i == page_obj.number|add:-3 %}
+                    <li>...</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+        </div>
+        
+{% endblock %}

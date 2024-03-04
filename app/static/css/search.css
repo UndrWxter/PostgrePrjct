@@ -1,0 +1,247 @@
+.section-results-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+}
+
+.section-form-container form {
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку при нехватке места */
+    gap: 10px;
+    width: 100%;
+}
+
+.section-results-container-gray {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin: 20px;
+    padding: 20px;
+    color:#666;
+
+    text-align: center;
+}
+
+.section-form-container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+.section-formform-container1 {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.section-formform-container2 {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 50%;
+    box-sizing: border-box;
+    
+}
+
+
+.section-form-container input,
+.section-form-container select,
+.section-form-container button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+    box-sizing: border-box;
+}
+
+
+.section-form-container button {
+    background-color: #8055d6;
+    color: white;
+    cursor: pointer;
+}
+
+/* Стили для второго контейнера с результатами и пагинацией */
+.section-results-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+}
+
+.section-results-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.section-results-container h2 {
+    color: #333;
+}
+
+.section-results-container p {
+    color: #666;
+}
+
+.section-results-container a {
+    color: #8055d6;
+    text-decoration: none;
+}
+
+.section-results-container a:hover {
+    text-decoration: underline;
+}
+
+.section-results-container ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.section-results-container li {
+    margin: 0 5px;
+}
+
+.result-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Добавлен отступ между контейнерами результатов */
+    padding: 20px;
+}
+.result-container img {
+    border-radius: 10px;
+}
+
+
+/* Дополнительные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .section-container {
+        margin: 10px;
+    }
+}
+
+.additional-filters-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+}
+
+.additional-filters-container form {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.additional-filters-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.additional-filters-container.show {
+    display: block;
+    opacity: 1;
+}
+
+.additional-filters-container button#closeFiltersBtn {
+    position: relative;
+    cursor: pointer;
+}
+
+.violet button{
+    background-color: #8055d6;
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+  }
+  
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .modal-content {
+    border-radius: 10px;
+  }
+
+  .my-custom-modal {
+    max-width: 800px;
+}
+
+
+
+
+
+
+

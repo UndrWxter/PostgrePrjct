@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<title>Дом в миг - Подача объявление</title>{% endblock %}
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/add.css' %}">
+{% endblock %}
+{% block content %}
+<section>
+    <form method="post" action="{% url 'landlord_add_property' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="title">Название:</label>
+        <input type="text" name="title" class="form-control" required>
+
+        <label for="property_type">Тип дома:</label>
+        <select name="property_type" class="form-control" required>
+            <option value="" selected disabled>Выберите...</option>
+            <option value="Квартира">Квартира</option>
+            <option value="Частный дом">Частный дом</option>
+            <option value="Коттедж">Коттедж</option>
+        </select>
+
+        <label for="area">Площадь дома:</label>
+        <input type="number" name="area" class="form-control" required>
+
+        <label for="num_rooms">Количество комнат:</label>
+        <input type="number" name="num_rooms" class="form-control">
+
+        <label for="bath_rooms">Количество сан-узлов:</label>
+        <input type="number" name="bath_rooms" class="form-control">
+
+        <label for="bed_rooms">Количество спальных комнат:</label>
+        <input type="number" name="bed_rooms" class="form-control">
+
+        <label for="address">Адрес дома:</label>
+        <input type="text" name="address" class="form-control" required>
+
+        <label for="district_location">Город-район:</label>
+        <input type="text" name="district_location" class="form-control" required>
+
+        <label for="rent_cost">Стоимость:</label>
+        <input type="number" name="rent_cost" class="form-control" required>
+
+        <label for="rent_type">Тип аренды:</label>
+        <select name="rent_type" class="form-control" required>
+            <option value="" selected disabled>Выберите...</option>
+            <option value="1">Почасовая</option>
+            <option value="2">Ежедневная</option>
+            <option value="3">Ежемесячная</option>
+        </select>
+
+        <label for="description">Описание:</label>
+        <textarea name="description" class="form-control" rows="4" required></textarea>
+
+        <label for="photos">Фото дома:</label>
+        <input type="file" name="photos" class="form-control-file" accept="image/*" multiple>
+
+        <label for="owner_number">Номер телефона:</label>
+        <input type="text" name="owner_number" class="form-control">
+        WhatsApp привязан к данному номеру?  <input type="checkbox" name="whatsapp" value="True"></br></br>
+
+        <label for="telegram">Telegram:</label>
+        <input type="text" name="telegram" class="form-control">
+
+        <button type="submit" class="btn btn-light like-btn btn-block">Подать объявление</button>
+    </form>
+</section>
+{% endblock %}

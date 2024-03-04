@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<title>Дом в миг</title>{% endblock %}
+
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/property_detail.css' %}"> 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> 
+    <style>
+        .star {
+            color: gold;
+            font-size: 50px;
+
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-5 contain section-form-container">
+                <div id="propertyInfo">
+                    <section class="center">
+                        <h3 style="color: #8055d6; text-align:center;">{{ post.title }}</h3>
+                        <hr>
+            <div class="characteristics">
+                <div class="characteristic-block violet">
+                    <h5>Тип недвижимости:</h5>
+                    <p>{{ post.property_type }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Площадь:</h5>
+                    <p>{{post.area|floatformat}}&nbspм²</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Количество комнат:</h5>
+                    <p>{{ post.num_rooms }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Количество сан-узлов:</h5>
+                    <p>{{ post.bath_rooms }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Количество спален:</h5>
+                    <p>{{ post.bed_rooms }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Адрес:</h5>
+                    <p>{{ post.address }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Район:</h5>
+                    <p>{{ post.district_location }}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Стоимость аренды:</h5>
+                    <p>{{ post.rent_cost|floatformat }}₸ / 
+                        {% if post.rent_type == 1 %}
+                            час
+                        {% elif post.rent_type == 2 %}
+                            сутки
+                        {% elif post.rent_type == 3 %}
+                            месяц
+                        {% endif %}</p>
+                </div>
+                <div class="characteristic-block violet">
+                    <h5>Тип аренды:</h5>
+                    <p>{% if post.rent_type == 1 %}
+                        Почасовая
+                    {% elif post.rent_type == 2 %}
+                        Ежедневная
+                    {% elif post.rent_type == 3 %}
+                        Ежемесячная
+                    {% endif %}</p>
+                </div>
+            </div>
+                <hr>
+                        <h5>Описание:</h5>
+                        <p>{{post.description}}</p>
+                        <hr>
+                        {% if request.user.is_authenticated and post.owner != user %}
+                        <form action="{% url 'property_detail' property_id=post.id %}" method="post" onsubmit="return validateDates()" class="booking-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_submit" value="book">
+                        
+                            <div class="form-group">
+                                <label for="start_date">Начало бронирования:</label>
+                                <input type="datetime-local" id="start_date" name="start_date" required>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="end_date">Конец бронирования:</label>
+                                <input type="datetime-local" id="end_date" name="end_date" required>
+                            </div>
+                        
+                            <input id="rent_type" type="hidden" value="{{post.rent_type}}" name="rent_type">
+                        
+                            <button type="submit" class="btn btn-primary btn-block">Бронировать</button><br>
+                        </form>
+                        {% else %}
+                        <h6 class="section-results-container d-flex justify-content-center">Вы Владелец, вы не забронируете свой же дом :)<br></h6>
+                        <hr>
+                        {% endif %}
+                        <form action="{% url 'property_detail' property_id=post.id %}" method="post" class="like-form violet">
+                            {% csrf_token %}
+                            {% if liked %}
+                                <input type="hidden" name="form_submit" value="unlike">
+                                <button type="submit" class="btn btn-light like-btn btn-block">
+                                    <i id="heartIcon" class="fas fa-heart"></i> Unlike
+                                </button>
+                            {% else %}
+                                <input type="hidden" name="form_submit" value="like">
+                                <button type="submit" class="btn btn-light like-btn btn-block">
+                                    <i id="heartIcon" class="far fa-heart"></i> Like
+                                </button>
+                            {% endif %}
+                        </form>                        
+                        
+                        {% if post.reviews.count > 0 %}
+                            <h3 style="color: #8055d6; text-align:center; margin-top:10px;">Рейтинг данного дома:</h3><div class="stars" id="rating"></div>
+                                               
+                            <a class="btn btn-primary btn-block" href="{% url 'property_reviews' property_id=post.pk %}">Отзывы</a>
+                        {% endif %}
+                        <div class="unique-section-form-container">
+                            {% if request.user.is_authenticated %}
+                                {% if applied %}
+                                    <form action="{% url 'property_detail' property_id=post.id %}" method="post" class="review-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="form_submit" value="review">
+                                    
+                                        <label for="rate">Оценка от 0-5:</label>
+                                        <input type="number" name="rate" min="1" max="5" required><br>
+                        
+                                        <label for="comment">Содержание:</label><br>
+                                        <textarea name="comment" rows="4" cols="50" required></textarea><br>
+                                        <button type="submit" class="btn btn-primary btn-block">Опубликовать</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="col-lg-6 contain">
+                <div id="propertySlider" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for photo in post.get_photos|default_if_none:"" %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %} radius">
+                                <img height="500px" class="d-block w-100 img-fluid" src="{{ photo }}" alt="Slide {{ forloop.counter }}">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#propertySlider" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#propertySlider" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                
+                <!-- Миниатюры -->
+                <div class="row mt-3">
+                    {% for photo in post.get_photos|default_if_none:"" %}
+                        <div class="col-2 d-flex align-items-start">
+                            <div class="thumbnail radius">
+                                <img class="img-fluid" src="{{ photo }}" alt="Thumbnail {{ forloop.counter }}" data-target="#propertySlider" data-slide-to="{{ forloop.index }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="unique-section-form-container">
+                    <h5 class="unique-section-title">Владелец данного объявления: <a href="{% url 'user_account' user_id=post.owner.id %}" class="unique-section-link">{{post.owner.username}}</a></h5>
+                    
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="characteristic-block violet">
+                                    <h5>Номер телефона:</h5>
+                                    <p>{{ post.owner_number }}</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="characteristic-block violet">
+                                    <h5>Телеграмм:</h5>
+                                    <p>{{ post.telegram }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+    <script>
+        $(document).ready(function() {
+            $('.thumbnail img').click(function(){
+                var index = $(this).closest('.col-2').index();
+                $('#propertySlider').carousel(index);
+            });
+        });
+    </script>
+    <script>
+        function ratingToStars(rating) {
+            var fullStars = '★'.repeat(Math.floor(rating));
+            var emptyStars = '☆'.repeat(Math.max(5 - Math.ceil(rating), 0));
+            return '<span class="star">' + fullStars + (emptyStars.length > 0 ? '☆' : '') + emptyStars + '</span>';
+        }
+    
+        var avgRating = parseFloat("{{ avg_rating|floatformat:1 }}");
+        document.getElementById('rating').innerHTML = ratingToStars(avgRating);
+    </script>
+    
+    
+{% endblock %}

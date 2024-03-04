@@ -1,0 +1,49 @@
+body {
+    background-image: url('../images/2.png');
+    background-size: cover;
+}
+
+.dd  {
+    font-family: Roboto;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.fr section {
+    margin-top: 20px;
+}
+
+.fr h2 {
+    color: #333;
+    text-align: center;
+}
+
+.free form {
+    display: flex;
+    flex-direction: column;
+}
+
+.free input, textarea {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.free button {
+    padding: 10px 20px;
+    color: white;
+    background-color: #8055d6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.free button:hover {
+    background-color: #6638c2;
+}

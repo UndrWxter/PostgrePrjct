@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Property Rental - Account page</title>{% endblock %}
+{% block css%}
+    <style>
+        .col-md-3 a{
+            background-color: #8055d6;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Пользователь {{ get_user.first_name }}</h1>
+
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <a href="{% url 'user_account_properties' user_id=get_user.pk %}" class="btn btn-primary btn-block">Объявления</a>
+            </div>
+
+            {% if get_user == user %}
+                <div class="col-md-3">
+                    <a href="{% url 'user_account_applications' user_id=get_user.pk %}" class="btn btn-primary btn-block">Входящие заявки</a>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="{% url 'user_account_contracts' user_id=get_user.pk %}" class="btn btn-primary btn-block">Мои контракты</a>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="{% url 'user_account_rents' user_id=get_user.pk %}" class="btn btn-primary btn-block">Мои аренды</a>
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <form method="post" action="{% url 'edit_account' user_id=user.id %}">
+                        {% csrf_token %}
+                    
+                        <div class="form-group">
+                            <label for="username">Имя пользователя:</label>
+                            <input type="text" id="username" name="username" value="{{ user.username }}" class="form-control" readonly>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="first_name">Имя:</label>
+                            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-control" readonly>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="last_name">Фамилия:</label>
+                            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-control" readonly>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}" class="form-control" readonly>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary btn-block">Изменить значения</button>
+                    </form>
+                </div>
+            {% else %}
+
+            <div class="col-md-12 mt-3">
+                <form method="post" action="{% url 'edit_account' user_id=user.id %}">
+                    {% csrf_token %}
+                
+                    <div class="form-group">
+                        <label for="username">Имя пользователя:</label>
+                        <input type="text" id="username" name="username" value="{{ get_user.username }}" class="form-control" readonly>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="{{ get_user.email }}" class="form-control" readonly>
+                    </div>
+
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

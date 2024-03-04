@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<title>Дом в миг - отзывы</title>{% endblock %}
+{% block css %}
+    <link rel = 'stylesheet' href = "{% static 'css/search.css' %}">
+    <script src="{% static "js/index.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+{% endblock %}
+
+{% block content %}
+<section class="section-results-container">
+    <div class="result-container">
+    <div class="row">
+        <div class="col-md-4">
+          <!-- Левая часть -->
+          <div class="">
+            {% if post.get_preview_photo != None %}
+                <img width="400px" src="{{ post.get_preview_photo }}">
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-5">
+          <!-- Средняя часть -->
+          <div class="menu">
+            <h4>{{post.num_rooms}}-комн., {{post.area|floatformat}}м² {{post.property_type}}</h4>
+            <h5>{{post.title}}</h5>
+            <hr>
+            <p>Описание:<p>
+            <p>{{ post.description|slice:":150" }}{% if post.description|length > 150 %}...{% endif %}</p>
+            <a href="{{ post.get_absolute_url }}">more</a>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="">
+            <h4>{{ post.rent_cost|floatformat }}₸ / 
+                {% if post.rent_type == 1 %}
+                    час
+                {% elif post.rent_type == 2 %}
+                    сутки
+                {% elif post.rent_type == 3 %}
+                    месяц
+                {% endif %}
+            </h4>
+            <h5>г.{{post.district_location}},{{post.address}}</h5>
+          </div>
+        </div>
+    </div>
+    </div>
+    <div class="result-container">
+        {% for i in reviews %}
+            <a href="#"><h2>{{i.user.first_name}}</h2></a>
+            <div id="app-{{ forloop.counter }}">
+                <star-rating :rating="{{i.rate}}" :increment="1"></star-rating>
+            </div>
+            <p>{{i.comment}}</p>
+            <hr>
+            <script>
+                Vue.component('star-rating', {
+                    props: ['rating', 'increment'],
+                    template: `
+                        <div>
+                            <span v-for="(item, index) in computedRating" :key="index">
+                                <i class="fa" :class="{'fa-star': item >= 1, 'fa-star-half-o': item < 1 && item > 0, 'fa-star-o': item <= 0}"></i>
+                            </span>
+                        </div>
+                    `,
+                    computed: {
+                        computedRating: function() {
+                            let rating = Math.round(this.rating / this.increment);
+                            return Array.from({length: 5}, (v, i) => (i < rating ? 1 : (i < rating ? 1 : 0)));
+                        }
+                    }
+                });
+                new Vue({
+                    el: '#app-{{ forloop.counter }}'
+                });
+            </script>
+        {% endfor %}
+    </div>
+        {% if page_obj.has_other_pages %}
+            <ul>
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li>{{ i }}</li>
+                {% elif i == 1 %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i >= page_obj.number|add:-2 and i <= page_obj.number|add:2  %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% elif i == page_obj.number|add:3 %}
+                    <li>...</li>
+                {% elif i == page_obj.number|add:-3 %}
+                    <li>...</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+    
+    </section>
+    
+{% endblock %}

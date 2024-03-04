@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}<title>Дом в миг - Sign Up</title>{% endblock %}
+
+{% block css %}<link rel = 'stylesheet' href = "{% static 'css/gg.css' %}">{% endblock %}
+
+{% block content %}
+    <section class="container py-5 ">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Регистрация</h2>
+                        <p class="text-center">Создайте аккаунт чтобы присоединиться к нашей площадке.</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for i in form %}
+                                <div class="mb-3">
+                                    <label class="form-label">{{ i.label }}</label>
+                                    {{ i }}
+                                    {% if i.errors %}
+                                        <div class="alert alert-danger">{{ i.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary w-100">Регистрация</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
